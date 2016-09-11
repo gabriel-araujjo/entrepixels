@@ -1,0 +1,8 @@
+[package]
+name = "entrepixels"
+version = "0.1.0"
+authors = ["Gabriel <gabriel140492@gmail.com>"]
+
+[dependencies]
+libc = "0.2.15"
+log = "0.3.6"
