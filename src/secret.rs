@@ -79,6 +79,7 @@ impl BitmapStream {
             return Err(::std::io::Error::new(::std::io::ErrorKind::Other, "End of pixel"))
         }
         let mask = self.masks[self.bit_pos as usize];
+        debug!("mask = {:x}", mask);
         let data = if bit {
             try!(pixel.value()) | mask
         } else {
@@ -87,6 +88,7 @@ impl BitmapStream {
 
         self.bit_pos += 1;
         try!(pixel.set_value(data));
+        debug!("pixel value after write = {:x}", try!(pixel.value()));
         Ok(())
     }
 }
@@ -174,7 +176,7 @@ impl Write for BitmapStream {
                             byte <<= 1;
                             write_bits += 1;
                             if write_bits == 8 {
-                                println!("write byte {:x}", byte);
+                                debug!("write byte {:x}", byte);
                                 write_bytes += 1;
                                 write_bits = 0;
                                 if write_bytes < buf.len() {

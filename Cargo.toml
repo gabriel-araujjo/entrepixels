@@ -6,3 +6,4 @@ authors = ["Gabriel <gabriel140492@gmail.com>"]
 [dependencies]
 libc = "0.2.15"
 log = "0.3.6"
+env_logger = "0.3"

@@ -1,4 +1,6 @@
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 extern crate libc;
 
 #[macro_use]
@@ -101,6 +103,7 @@ fn write_message(bit_buf: &mut BitmapStream, message: &String) -> Result<(), Err
     }
     try!(bit_buf.write(&message_len[..]));
     try!(write!(bit_buf, "{}", message));
+    try!(bit_buf.flush());
     Ok(())
 }
 
@@ -108,6 +111,7 @@ fn read_message(bit_buf: &mut BitmapStream) -> Result<String, Error> {
     let mut message_size = [0u8;4];
     try!(bit_buf.read(&mut message_size[..]));
     let message_size = read_le_u32(& message_size, 0);
+    debug!("message size = {}", message_size);
     let mut data_message = vec![0; message_size as usize];
     try!(bit_buf.read(&mut data_message[..]));
     match String::from_utf8(data_message) {
@@ -117,6 +121,7 @@ fn read_message(bit_buf: &mut BitmapStream) -> Result<String, Error> {
 }
 
 fn main() {
+    env_logger::init().unwrap();
     let mut args = match Args::from_env_args(env_args()) {
         Ok(args) => args,
         Err(err) => {

@@ -19,7 +19,6 @@ use super::io::bitbuf::BitBuf;
 /// Provavelmente irei excluir estes imports
 use super::util::read_le_u16;
 use super::util::read_le_u32;
-use super::util::read_be_u32;
 
 type SharedData = Rc<RefCell<BitBuf<Cursor<Vec<u8>>>>>;
 
@@ -148,14 +147,19 @@ impl Bitmap {
             (0xff0000u32, 0xff00u32, 0xffu32, 0u32)
         } else if compression == consts::BI_BITFIELDS_COMPRESSION {
             (
-                read_be_u32(&buf, consts::RED_MASK_POSITION),
-                read_be_u32(&buf, consts::GREEN_MASK_POSITION),
-                read_be_u32(&buf, consts::BLUE_MASK_POSITION),
-                read_be_u32(&buf, consts::ALPHA_MASK_POSITION)
+                read_le_u32(&buf, consts::RED_MASK_POSITION),
+                read_le_u32(&buf, consts::GREEN_MASK_POSITION),
+                read_le_u32(&buf, consts::BLUE_MASK_POSITION),
+                read_le_u32(&buf, consts::ALPHA_MASK_POSITION)
             )
         } else {
             (1u32, 0u32, 0u32, 0u32)
         };
+
+        debug!("red_mask = {:x}", masks.0);
+        debug!("green_mask = {:x}", masks.1);
+        debug!("blue_mask = {:x}", masks.2);
+        debug!("alpha_mask = {:x}", masks.3);
 
 
         Ok( PixelFormat {

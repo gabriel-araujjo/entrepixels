@@ -26,14 +26,6 @@ pub fn read_le_u32(buf: &[u8], position: usize) -> u32 {
     u32::from_le(read_num_bytes!(u32, 4, n))
 }
 
-/// read an u32 from buffer at position
-/// The number is in big endian format in buffer
-#[inline(always)]
-pub fn read_be_u32(buf: &[u8], position: usize) -> u32 {
-    let n = &buf[position .. (position + 4)];
-    u32::from_be(read_num_bytes!(u32, 4, n))
-}
-
 /// read an u16 from buffer at position
 /// The number is in little endian format in buffer
 #[inline(always)]

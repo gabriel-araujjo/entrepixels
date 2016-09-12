@@ -91,7 +91,7 @@ impl<T: Read + Write + Seek + Sized> BitBuf<T> {
     /// ```
     ///
     pub fn write(&mut self, mut data: u32, mut bits: u8) -> Result<u8, Error> {
-        println!("writing {} bits to data", bits);
+        debug!("writing {} bits to data", bits);
         if bits > 32 {
             return Err(Error::new("Invalid number of bits"))
         }
