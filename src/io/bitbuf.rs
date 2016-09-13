@@ -203,11 +203,13 @@ impl<T: Read + Write + Seek + Sized> BitBuf<T> {
     }
 
 
+    #[inline(always)]
     fn read_bit(&mut self) -> bool {
         self.remaining_bits -= 1;
         self.current_byte & (1u8 << self.remaining_bits) != 0u8
     }
 
+    #[inline(always)]
     fn write_bit(&mut self, bit: bool) -> Result<(), Error> {
         self.remaining_bits -= 1;
         if bit {
@@ -226,6 +228,7 @@ impl<T: Read + Write + Seek + Sized> BitBuf<T> {
         Ok(())
     }
 
+    #[inline(always)]
     fn read_byte(&mut self) -> Result<u8, Error> {
         let mut sketch_buf = [0u8];
         if try!(self.buf.read(&mut sketch_buf[..])) != 1 {
@@ -234,6 +237,7 @@ impl<T: Read + Write + Seek + Sized> BitBuf<T> {
         Ok(sketch_buf[0])
     }
 
+    #[inline(always)]
     fn write_byte(&mut self, byte: u8) -> Result<(), Error> {
         let mut sketch_buf = [byte];
         if try!(self.buf.write(&mut sketch_buf[..])) != 1 {
@@ -289,7 +293,7 @@ mod tests {
         let mut data = BitBuf::from(data);
         assert_eq!(data.write(0x11, 5).unwrap(), 5);
         assert_eq!(data.write(0x09, 4).unwrap(), 4);
-        assert_eq!(data.write(0x41, 15).unwrap(), 14);
+        assert_eq!(data.write(0x41, 15).unwrap(), 15);
 
         assert_eq!(&data.into_inner().into_inner()[..], &[0x8c, 0x80, 0x41, 0x00]);
     }
